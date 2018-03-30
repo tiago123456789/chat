@@ -1,0 +1,15 @@
+<% include ./partials/header.ejs %>
+<br/>
+<div class="row">
+    <div class="col-md-4 offset-md-4 jumbotron">
+        <h3 class="text-center">Login</h3>
+        <form action="/auth" method="post">
+            <div class="form-group">
+                <input type="type" class="form-control" name="name"
+                       id="name" placeholder="Enter name">
+            </div>
+            <button type="submit" class="btn btn-primary">Access</button>
+        </form>
+    </div>
+</div>
+<% include ./partials/footer.ejs %>
