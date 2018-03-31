@@ -1,6 +1,9 @@
 <% include ./partials/header.ejs %>
 
 <div id="mySidenav" class="sidenav col-md-3">
+    <div class="col-md-12" style="float: left; top: -40px; left: 10px;">
+        <button class="btn btn-primary" data-toggle="modal" data-target="#new_room">Nova Sala</button>
+    </div>
     <a href="#">About</a>
     <a href="#">Services</a>
     <a href="#">Clients</a>
@@ -27,6 +30,27 @@
             <input type="text" placeholder="Digite mensagem" class="form-control col-md-12" />
             <button class="btn btn-primary col-md-2">Enviar audio</button>
         </form>
+    </div>
+</div>
+<div class="modal fade" id="new_room" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">New Room</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form >
+                    <input type="text" class="form-control" name="name" placeholder="Typing room..." />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Create</button>
+            </div>
+        </div>
     </div>
 </div>
 
