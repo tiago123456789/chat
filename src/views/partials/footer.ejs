@@ -2,37 +2,32 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src="/socket.io/socket.io.js"></script>
+<script src="/js/ElementsHtml.js"></script>
+<script src="/js/SocketFactory.js"></script>
+<script src="/js/EmitEvent.js"></script>
+<script src="/js/ListenerEvent.js"></script>
 <script>
-    socketFactory().getSocket().on("listRooms", (rooms) => {
+
+    ListenerEvent.watching("listRooms", (rooms) => {
         buildListRooms(rooms);
+        joinRooms();
     });
 
-    socketFactory().getSocket().on("newRoom", (room) => {
+    ListenerEvent.watching("newRoom", (room) => {
         addRoom(room);
+    });
+
+    ListenerEvent.watching("listMessages", (messages) => {
+        buildListMessages(messages);
     });
 
     $("#submit_new_room").on('click', () => {
         const room = $("#create_new_room").val();
-        socketFactory().getSocket().emit("addNewRoom", room);
+        EmitEvent.emit("addNewRoom", room);
         $("#create_new_room").val('');
         closeModal();
     });
 
-    /**
-     * @description Factory socket.
-     */
-    function socketFactory(url = 'http://localhost:3000') {
-        let socket = null;
-
-        return {
-            getSocket() {
-                if (!socket) {
-                    socket = io(url);
-                }
-                return socket;
-            }
-        }
-    }
 
     /**
      * @description Close modal of new room.
@@ -49,8 +44,30 @@
         rooms.forEach(room => addRoom(room));
     }
 
+    function buildListMessages(messages) {
+        messages.forEach(message => addMessage(message));
+    }
+
+    /**
+     * @description Added new room.
+     * @param room
+     */
     function addRoom(room) {
-        $("#mySidenav").append(`<a href="#" id=${room._id} data-room='true'>${room.name}</a>`)
+        $("#mySidenav").append(ElementsHtml.getRoom(room))
+    }
+
+    function addMessage(message) {
+        $("#messages-chat").append(ElementsHtml.getMessage(message));
+    }
+
+    /**
+     * @description Responsable per joined in room.
+     */
+    function joinRooms() {
+        $("a[data-room='true']").on('click', function() {
+            const idRoom = $(this).attr("id");
+            EmitEvent.emit("joinRoom", idRoom);
+        });
     }
 </script>
 </body>

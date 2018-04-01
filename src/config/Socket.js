@@ -15,8 +15,9 @@ export default (io) => {
         socket.on("addNewRoom", async (newRoom) => {
             try {
                 const newRoomReturned = await roomService.create({ name: newRoom });
-                socket.broadcast.emit("newRoom", newRoomReturned)
+                io.emit("newRoom", newRoomReturned)
             } catch(e) {
+                console.log(e);
                 socket.emit(e.message);
             }
         });
@@ -25,10 +26,10 @@ export default (io) => {
             try {
                 socket.join(idRoom);
                 const messages = await messageService.findBy({ room: idRoom });
-                socket.to(idRoom).emit("listMessages", messages);
+                socket.broadcast.emit("listMessages", messages);
             } catch(e) {
                 socket.emit(e.message);
             }
-        })
+        });
     });
 }
