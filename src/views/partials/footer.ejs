@@ -6,19 +6,24 @@
 <script src="/js/SocketFactory.js"></script>
 <script src="/js/EmitEvent.js"></script>
 <script src="/js/ListenerEvent.js"></script>
+<script src="/js/BuildElement.js"></script>
 <script>
 
     ListenerEvent.watching("listRooms", (rooms) => {
-        buildListRooms(rooms);
+        BuildElement.buildListRoom(rooms);
         joinRooms();
     });
 
     ListenerEvent.watching("newRoom", (room) => {
-        addRoom(room);
+        BuildElement.buildRoom(room);
     });
 
     ListenerEvent.watching("listMessages", (messages) => {
-        buildListMessages(messages);
+        BuildElement.buildListMessage(messages);
+    });
+
+    ListenerEvent.watching("newMessage", (message) => {
+        BuildElement.buildMessage(message);
     });
 
     $("#submit_new_room").on('click', () => {
@@ -34,30 +39,6 @@
      */
     function closeModal() {
         $("#new_room").modal('hide');
-    }
-
-    /**
-     * @description Build list rooms.
-     * @param rooms
-     */
-    function buildListRooms(rooms) {
-        rooms.forEach(room => addRoom(room));
-    }
-
-    function buildListMessages(messages) {
-        messages.forEach(message => addMessage(message));
-    }
-
-    /**
-     * @description Added new room.
-     * @param room
-     */
-    function addRoom(room) {
-        $("#mySidenav").append(ElementsHtml.getRoom(room))
-    }
-
-    function addMessage(message) {
-        $("#messages-chat").append(ElementsHtml.getMessage(message));
     }
 
     /**

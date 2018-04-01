@@ -31,5 +31,14 @@ export default (io) => {
                 socket.emit(e.message);
             }
         });
+
+        socket.on("sendMsgText", async (message) => {
+            try {
+                const messageReturned = await messageService.create(message);
+                socket.to(message.room).emit("newMessage", messageReturned);
+            } catch(e) {
+                socket.emit(e.message);
+            }
+        })
     });
 }
