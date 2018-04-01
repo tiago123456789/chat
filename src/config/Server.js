@@ -1,10 +1,20 @@
 import express from "express";
 import bodyParser from "body-parser";
+import socketIO from "socket.io";
+import httpModule from "http";
+
 import routes from "./../routes/Index";
+import socketConfigure from "./Socket";
 import "./Database";
 
 const app = express();
+const http = httpModule.createServer(app);
+const io = socketIO(http);
 
+/**
+ * @description Defined configuration socket
+ */
+socketConfigure(io);
 /**
  * @description Defined template engine and dir views.
  */
@@ -26,4 +36,4 @@ app.use(bodyParser.urlencoded({ extended: true }));
  */
 routes(app);
 
-export default app;
+export default http;

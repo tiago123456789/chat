@@ -4,10 +4,6 @@
     <div class="col-md-12" style="float: left; top: -40px; left: 10px;">
         <button class="btn btn-primary" data-toggle="modal" data-target="#new_room">Nova Sala</button>
     </div>
-    <a href="#">About</a>
-    <a href="#">Services</a>
-    <a href="#">Clients</a>
-    <a href="#">Contact</a>
 </div>
 <div style="margin-left: 18%; margin-top: 10px;">
     <div class="col-md-12" style="overflow: scroll; min-height: 550px">
@@ -44,11 +40,14 @@
             </div>
             <div class="modal-body">
                 <form >
-                    <input type="text" class="form-control" name="name" placeholder="Typing room..." />
+                    <input type="text"
+                           class="form-control" value=""
+                           name="name" id="create_new_room"
+                           placeholder="Typing room..." autofocus/>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Create</button>
+                <button type="button" class="btn btn-primary" id="submit_new_room">Create</button>
             </div>
         </div>
     </div>
