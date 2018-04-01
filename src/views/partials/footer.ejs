@@ -7,15 +7,15 @@
         buildListRooms(rooms);
     });
 
+    socketFactory().getSocket().on("newRoom", (room) => {
+        addRoom(room);
+    });
+
     $("#submit_new_room").on('click', () => {
         const room = $("#create_new_room").val();
         socketFactory().getSocket().emit("addNewRoom", room);
         $("#create_new_room").val('');
         closeModal();
-    });
-
-    socketFactory().getSocket().on("newRoom", (room) => {
-        addRoom(room);
     });
 
     /**
@@ -50,7 +50,7 @@
     }
 
     function addRoom(room) {
-        $("#mySidenav").append(`<a href="#" id=${room._id}>${room.name}</a>`)
+        $("#mySidenav").append(`<a href="#" id=${room._id} data-room='true'>${room.name}</a>`)
     }
 </script>
 </body>

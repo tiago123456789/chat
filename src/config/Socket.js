@@ -20,5 +20,15 @@ export default (io) => {
                 socket.emit(e.message);
             }
         });
+
+        socket.on("joinRoom", async (idRoom) => {
+            try {
+                socket.join(idRoom);
+                const messages = await messageService.findBy({ room: idRoom });
+                socket.to(idRoom).emit("listMessages", messages);
+            } catch(e) {
+                socket.emit(e.message);
+            }
+        })
     });
 }
