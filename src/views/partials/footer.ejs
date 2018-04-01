@@ -25,6 +25,7 @@
     });
 
     ListenerEvent.watching("newMessage", (message) => {
+        console.log(message);
         BuildElement.buildMessage(message);
     });
 
@@ -48,8 +49,8 @@
                 {type: "msg", content: message, author: "Author test", room: roomSelected})
             cleanFieldMessage();
             $("div[data-alert='true']").remove();
-        } else if (!$("div[data-alert='true']").hasClass("alert-info") && !roomSelected) {
-            BuildElement.buildAlertMessage({ alert: "info", title: "Warning!", subtitle: "Selected one room!" });
+        } else if (!$("div[data-alert='true']").hasClass("alert-warning") && !roomSelected) {
+            BuildElement.buildAlertMessage({ alert: "warning", title: "Warning!", subtitle: "Selected one room!" });
         }
     })
 
