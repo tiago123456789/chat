@@ -8,6 +8,7 @@
 <script src="/js/ListenerEvent.js"></script>
 <script src="/js/BuildElement.js"></script>
 <script>
+    let roomSelected = null;
 
     ListenerEvent.watching("listRooms", (rooms) => {
         BuildElement.buildListRoom(rooms);
@@ -19,12 +20,17 @@
     });
 
     ListenerEvent.watching("listMessages", (messages) => {
+        cleanListMessage();
         BuildElement.buildListMessage(messages);
     });
 
     ListenerEvent.watching("newMessage", (message) => {
         BuildElement.buildMessage(message);
     });
+
+    ListenerEvent.watching("error", (error) => {
+        BuildElement.buildAlertMessage({ alert: "danger", title: "Error!", subtitle: error})
+    })
 
     $("#submit_new_room").on('click', () => {
         const room = $("#create_new_room").val();
@@ -33,22 +39,38 @@
         closeModal();
     });
 
+    $("#new_message_text").keyup(function(event) {
+        event.preventDefault();
+        const codeKeyBoardEnter = 13;
+        const message = $("#new_message_text").val().trim();
+        if (event.keyCode == codeKeyBoardEnter && message.length > 0 && roomSelected) {
+            EmitEvent.emit("sendMsgText",
+                {type: "msg", content: message, author: "Author test", room: roomSelected})
+            cleanFieldMessage();
+            $("div[data-alert='true']").remove();
+        } else if (!$("div[data-alert='true']").hasClass("alert-info") && !roomSelected) {
+            BuildElement.buildAlertMessage({ alert: "info", title: "Warning!", subtitle: "Selected one room!" });
+        }
+    })
 
-    /**
-     * @description Close modal of new room.
-     */
     function closeModal() {
         $("#new_room").modal('hide');
     }
 
-    /**
-     * @description Responsable per joined in room.
-     */
     function joinRooms() {
         $("a[data-room='true']").on('click', function() {
             const idRoom = $(this).attr("id");
             EmitEvent.emit("joinRoom", idRoom);
+            roomSelected = idRoom;
         });
+    }
+
+    function cleanFieldMessage() {
+        $("#new_message_text").val("");
+    }
+
+    function cleanListMessage() {
+        $("#messages-chat").empty();
     }
 </script>
 </body>

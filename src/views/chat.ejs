@@ -1,5 +1,8 @@
 <% include ./partials/header.ejs %>
 
+<div class="col-md-3" style="position: absolute; right: 25px; z-index: 100;" id="area_message_notifications">
+</div>
+
 <div id="mySidenav" class="sidenav col-md-3">
     <div class="col-md-12" style="float: left; top: -40px; left: 10px;">
         <button class="btn btn-primary" data-toggle="modal" data-target="#new_room">Nova Sala</button>
@@ -10,7 +13,7 @@
     </div>
     <div class="col-md-12">
         <form class="col-md-12">
-            <input type="text" placeholder="Digite mensagem" class="form-control col-md-12" />
+            <input type="text" placeholder="Digite mensagem" id="new_message_text" class="form-control col-md-12" />
             <button class="btn btn-primary col-md-2">Enviar audio</button>
         </form>
     </div>

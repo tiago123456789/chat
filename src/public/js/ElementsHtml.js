@@ -14,4 +14,11 @@ class ElementsHtml {
     static getRoom(room) {
         return `<a href="#" id=${room._id} data-room='true'>${room.name}</a>`;
     }
+
+    static getAlertMessage(configure) {
+        return ` 
+            <div class="alert alert-${configure.alert}" data-alert="true">
+                <strong>${configure.title}</strong> ${configure.subtitle}
+            </div>`
+    }
 }

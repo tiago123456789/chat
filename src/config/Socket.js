@@ -18,7 +18,7 @@ export default (io) => {
                 io.emit("newRoom", newRoomReturned)
             } catch(e) {
                 console.log(e);
-                socket.emit(e.message);
+                socket.emit("error", e.message);
             }
         });
 
@@ -28,16 +28,17 @@ export default (io) => {
                 const messages = await messageService.findBy({ room: idRoom });
                 socket.broadcast.emit("listMessages", messages);
             } catch(e) {
-                socket.emit(e.message);
+                socket.emit("error", e.message);
             }
         });
 
         socket.on("sendMsgText", async (message) => {
             try {
+                message.author = socket.handshake.session.user.name;
                 const messageReturned = await messageService.create(message);
-                socket.to(message.room).emit("newMessage", messageReturned);
+                io.to(message.room).emit("newMessage", messageReturned);
             } catch(e) {
-                socket.emit(e.message);
+                socket.emit("error", e.message);
             }
         })
     });

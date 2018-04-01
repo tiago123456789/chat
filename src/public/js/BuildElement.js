@@ -15,4 +15,9 @@ class BuildElement {
     static buildListMessage(messages) {
         messages.forEach(message => BuildElement.buildMessage(  message));
     }
+
+    static buildAlertMessage(configure) {
+        $("#area_message_notifications")
+            .append(ElementsHtml.getAlertMessage(configure));
+    }
 }

@@ -5,7 +5,9 @@ export default class AuthController {
     }
 
     auth(request, response) {
-        console.log(request.body);
+        request.session.user = {
+           name: request.body.name
+        };
         response.redirect("/chat");
     }
 };

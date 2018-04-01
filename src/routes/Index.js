@@ -1,11 +1,16 @@
 import AuthController from "./../controller/AuthController";
 import ChatController from "./../controller/ChatController";
+import AuthMiddleware from "./../middleware/AuthMiddleware";
 
 export default (app) => {
 
     const authController = new AuthController();
     const chatController  = new ChatController();
 
+    /**
+     * @description Authenticated http.
+     */
+    app.use("/chat", AuthMiddleware.http);
 
     /**
      * @description Render page authentication.
