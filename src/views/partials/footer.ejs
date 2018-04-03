@@ -9,7 +9,62 @@
 <script src="/js/BuildElement.js"></script>
 <script>
     let roomSelected = null;
+    let mediaRecorder = null;
+    let audioPermission = false;
 
+    class AudioFactory {
+
+        static getMedia() {
+            return navigator.mediaDevices.getUserMedia({ audio: true });
+        }
+    }
+
+    class AudioService {
+
+        constructor() {
+            this._chunk = [];
+        }
+
+        captureData(data) {
+            this._chunk.push(data);
+        }
+
+        captureFinish(mediaRecorder) {
+            const reader = new window.FileReader()
+            const blob = new Blob(this._chunk, { type: 'audio/ogg; codec=opus'})
+            reader.readAsDataURL(blob)
+            reader.onloadend = () => callback();
+            this._chunk = []
+        }
+    }
+
+    AudioFactory
+        .getMedia()
+        .then(stream => {
+            audioPermission = true;
+            mediaRecorder = new MediaRecorder(stream);
+            const audioService = new AudioService();
+            mediaRecorder.ondataavailable = audioService.captureData;
+            mediaRecorder.onstop = () => audioService.captureFinish(() => {
+                EmitEvent.emit("sendAudio", { room: roomSelected, content: reader.result, type: "audio"})
+            });
+        })
+        .catch(() => {
+            mediaRecorder = null;
+            audioPermission = false;
+        });
+
+    $('#send-audio')
+        .mouseup(function(){
+            if(audioPermission && roomSelected !=='') {
+                mediaRecorder.stop()
+            }
+        })
+        .mousedown(function(){
+            if(audioPermission && roomSelected !=='') {
+                mediaRecorder.start()
+            }
+        })
     ListenerEvent.watching("listRooms", (rooms) => {
         BuildElement.buildListRoom(rooms);
         joinRooms();
@@ -25,8 +80,8 @@
     });
 
     ListenerEvent.watching("newMessage", (message) => {
-        console.log(message);
         BuildElement.buildMessage(message);
+        cleanFieldMessage();
     });
 
     ListenerEvent.watching("error", (error) => {
@@ -47,7 +102,6 @@
         if (event.keyCode == codeKeyBoardEnter && message.length > 0 && roomSelected) {
             EmitEvent.emit("sendMsgText",
                 {type: "msg", content: message, author: "Author test", room: roomSelected})
-            cleanFieldMessage();
             $("div[data-alert='true']").remove();
         } else if (!$("div[data-alert='true']").hasClass("alert-warning") && !roomSelected) {
             BuildElement.buildAlertMessage({ alert: "warning", title: "Warning!", subtitle: "Selected one room!" });

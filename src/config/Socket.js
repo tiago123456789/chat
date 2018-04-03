@@ -36,8 +36,7 @@ export default (io) => {
             try {
                 message.author = socket.handshake.session.user.name;
                 const messageReturned = await messageService.create(message);
-                console.log(messageReturned);
-                io.to(message.room).emit("newMessage", messageReturned);
+                socket.broadcast.emit("newMessage", messageReturned);
             } catch(e) {
                 socket.emit("error", e.message);
             }
