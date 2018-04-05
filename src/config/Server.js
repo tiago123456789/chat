@@ -4,10 +4,12 @@ import socketIO from "socket.io";
 import httpModule from "http";
 import session from "express-session";
 import sharedSession from "express-socket.io-session";
+import morgan from "morgan";
 
 import routes from "./../routes/Index";
 import socketConfigure from "./Socket";
 import AuthMiddleware from "./../middleware/AuthMiddleware";
+import configureLogger from "./Logger";
 import "./Database";
 
 const app = express();
@@ -53,6 +55,11 @@ app.use(express.static("./src/public"));
  * @description Defined middleware than parse datas to json.
  */
 app.use(bodyParser.urlencoded({ extended: true }));
+
+/**
+ * @description Middleware responsable writer logging http of application.
+ */
+app.use(morgan('combined', { stream: configureLogger.stream }));
 
 /**
  * @description Defined routes application.

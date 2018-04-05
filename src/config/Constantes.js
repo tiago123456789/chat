@@ -4,7 +4,8 @@ const CONSTANTES = {
         PORT: process.env.PORT || 3000
     },
     prd: {
-        PORT: process.env.PORT || 3000
+        URL_DB: "",
+        PORT: ""
     },
     test: {
         URL_DB: "mongodb://172.17.0.2:27017/chat-test",
