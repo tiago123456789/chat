@@ -5,7 +5,11 @@ class BuildElement {
     }
 
     static buildMessage(message) {
-        $("#messages-chat").append(ElementsHtml.getMessage(message));
+        if (message.typeMsg === "msg") {
+            $("#messages-chat").append(ElementsHtml.getMessage(message));
+        } else {
+            $("#messages-chat").append(ElementsHtml.getMessageAudio(message));
+        }
     }
 
     static buildListRoom(rooms) {

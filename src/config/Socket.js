@@ -17,7 +17,6 @@ export default (io) => {
                 const newRoomReturned = await roomService.create({ name: newRoom });
                 io.emit("newRoom", newRoomReturned)
             } catch(e) {
-                console.log(e);
                 socket.emit("error", e.message);
             }
         });
@@ -34,12 +33,30 @@ export default (io) => {
 
         socket.on("sendMsgText", async (message) => {
             try {
-                message.author = socket.handshake.session.user.name;
-                const messageReturned = await messageService.create(message);
+                const messageReturned = await saveNewMessage(message);
                 socket.broadcast.emit("newMessage", messageReturned);
             } catch(e) {
                 socket.emit("error", e.message);
             }
-        })
+        });
+
+
+        socket.on("sendAudio", async (message) => {
+            try {
+                const messageReturned = await saveNewMessage(message);
+                socket.broadcast.emit("newMessage", messageReturned);
+            } catch (e) {
+                socket.emit("error", e.message);
+            }
+        });
+
+        async function saveNewMessage(message) {
+            message.author = getAuthorMessage();
+            return await messageService.create(message);
+        }
+
+        function getAuthorMessage() {
+            return socket.handshake.session.user.name;
+        }
     });
 }

@@ -11,6 +11,19 @@ class ElementsHtml {
                 <br/>`;
     }
 
+    static getMessageAudio(message) {
+        return `
+                <div class="card col-md-12">
+                    <div class="card-body">
+                        <h5 class="card-title">${message.author}</h5>
+                            <audio controls class="card-text">
+                              <source src=${message.content} type="audio/ogg">
+                            </audio>
+                    </div>
+                </div>
+                <br/>`;
+    }
+
     static getRoom(room) {
         return `<a href="#" id=${room._id} data-room='true'>${room.name}</a>`;
     }
