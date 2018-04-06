@@ -10,4 +10,9 @@ export default class AuthController {
         };
         response.redirect("/chat");
     }
+
+    logout(request, response) {
+        request.session.destroy();
+        response.redirect("/auth");
+    }
 };

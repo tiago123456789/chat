@@ -18,6 +18,11 @@ export default (app) => {
     app.get("/auth", authController.index);
 
     /**
+     * @description Logout of app.
+     */
+    app.get("/logout", authController.logout);
+
+    /**
      * @description Route responsable by authentication user.
      */
     app.post("/auth", authController.auth);
